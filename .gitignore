@@ -3,4 +3,6 @@ build/
 *.obj
 *.exe
 *.user
-.env
+Makefile.Debug
+Makefile.Release
+.qmake.stash

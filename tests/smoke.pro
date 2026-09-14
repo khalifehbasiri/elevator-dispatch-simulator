@@ -1,0 +1,11 @@
+QT += core gui widgets testlib
+CONFIG += console c++11
+CONFIG -= app_bundle
+TEMPLATE = app
+TARGET = elevator-smoke
+INCLUDEPATH += $$PWD/..
+SOURCES += $$files($$PWD/../*.cpp)
+SOURCES -= $$PWD/../main.cpp
+SOURCES += $$PWD/smoke.cpp
+HEADERS += $$files($$PWD/../*.h)
+FORMS += $$PWD/../mainwindow.ui

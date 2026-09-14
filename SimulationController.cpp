@@ -5,6 +5,7 @@
 #include "IElevatorDispatchStrategy.h"
 #include "NearestCarStrategy.h"
 #include <cstdlib>
+#include <climits>
 #include <QDebug>
 #include <QVariant>
 

@@ -1,0 +1,1 @@
+Historical prototype by Khalifeh Basiri, imported and documented retrospectively. Commit timestamps follow the recorded project date. Import-time documentation, demonstrations and maintenance fixes are retrospective additions. Supporting framework components retain their existing notices; no additional license grant is made for third-party components.
