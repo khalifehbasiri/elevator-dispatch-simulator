@@ -14,4 +14,4 @@ HEADERS += \
     $$files($$PWD/../src/model/*.h) \
     $$files($$PWD/../src/simulation/*.h) \
     $$PWD/../src/ui/mainwindow.h
-FORMS += $$PWD/../src/ui/mainwindow.ui
+RESOURCES += $$PWD/../src/ui/resources.qrc

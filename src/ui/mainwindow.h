@@ -1,26 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QList>
 #include <QMainWindow>
+#include <QString>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+class QComboBox;
+class QFrame;
+class QLabel;
+class QPlainTextEdit;
+class QPushButton;
+class QSpinBox;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-    static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-    static MainWindow* activeWindow;
+    explicit MainWindow(QWidget* parent = nullptr);
 
 private:
-    Ui::MainWindow *ui;
-    QString lastLogMessage;
+    enum class RunState { Ready, Running, Paused, Stopped };
     struct PassengerScript {
         int time;
         int passengerID;
@@ -32,29 +32,42 @@ private:
         QString type;
     };
 
+    void buildUi();
+    void applyConfiguration();
+    void addPassengerScript();
+    void addSafetyEvent();
+    void startSimulation();
+    void pauseSimulation();
+    void resumeSimulation();
+    void stopSimulation();
+    void onSimulationUpdated();
+    void refreshFloorGrid();
+    void updateControls();
+    void appendToLog(const QString& message);
+
+    RunState runState = RunState::Ready;
     QList<PassengerScript> passengerScripts;
     QList<SafetyEvent> safetyEvents;
 
-private slots:
-    void on_applyConfigButton_clicked();
-
-    // Scripts
-    void on_addPassengerScriptButton_clicked();
-    void on_addSafetyEventButton_clicked();
-
-    // Simulation Control
-    void onStartClicked();
-    void onPauseClicked();
-    void onResumeClicked();
-    void onStopClicked();
-
-    // Called each time simulation updates
-    void onSimulationUpdated();
-
-    void refreshFloorGrid();
-
-public slots:
-    void appendToLog(const QString& message);
+    QLabel* statusLabel = nullptr;
+    QLabel* timeLabel = nullptr;
+    QFrame* floorGridFrame = nullptr;
+    QPlainTextEdit* logOutput = nullptr;
+    QPlainTextEdit* scriptListOutput = nullptr;
+    QPlainTextEdit* eventListOutput = nullptr;
+    QSpinBox* floorsSpinBox = nullptr;
+    QSpinBox* elevatorsSpinBox = nullptr;
+    QSpinBox* passengersSpinBox = nullptr;
+    QSpinBox* scriptTimeSpinBox = nullptr;
+    QSpinBox* passengerIdSpinBox = nullptr;
+    QSpinBox* startFloorSpinBox = nullptr;
+    QSpinBox* destFloorSpinBox = nullptr;
+    QSpinBox* eventTimeSpinBox = nullptr;
+    QComboBox* eventTypeComboBox = nullptr;
+    QPushButton* startButton = nullptr;
+    QPushButton* pauseButton = nullptr;
+    QPushButton* resumeButton = nullptr;
+    QPushButton* stopButton = nullptr;
 };
 
-#endif // MAINWINDOW_H
+#endif

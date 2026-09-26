@@ -17,4 +17,4 @@ HEADERS += \
     $$files(src/simulation/*.h) \
     src/ui/mainwindow.h
 
-FORMS += src/ui/mainwindow.ui
+RESOURCES += src/ui/resources.qrc
