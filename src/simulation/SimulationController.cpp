@@ -2,8 +2,6 @@
 #include "Elevator.h"
 #include "Floor.h"
 #include "Passenger.h"
-#include "IElevatorDispatchStrategy.h"
-#include "NearestCarStrategy.h"
 #include <cstdlib>
 #include <climits>
 #include <QDebug>
@@ -13,7 +11,6 @@ SimulationController* SimulationController::instance = nullptr;
 
 SimulationController::SimulationController(QObject* parent)
     : QObject(parent),
-      dispatchStrategy(new NearestCarStrategy),
       isRunning(false),
       currentTime(0)
 {
@@ -31,6 +28,10 @@ SimulationController* SimulationController::getInstance()
 
 void SimulationController::configure(int floorCount, int elevatorCount, int passengerCount)
 {
+    simulationTimer->stop();
+    isRunning = false;
+    currentTime = 0;
+
     for(auto* f : floors) delete f;
     floors.clear();
     for(auto* e : elevators) delete e;
@@ -86,14 +87,11 @@ void SimulationController::resumeSimulation()
 
 void SimulationController::stopSimulation()
 {
-    if(isRunning) {
-        simulationTimer->stop();
-        isRunning = false;
-
-        for(auto* e : elevators) {
-            e->clearRequests();
-            e->switchToStopState();
-        }
+    simulationTimer->stop();
+    isRunning = false;
+    for(auto* e : elevators) {
+        e->clearRequests();
+        e->switchToStopState();
     }
     qDebug() << "Simulation stopped at time=" << currentTime;
 }

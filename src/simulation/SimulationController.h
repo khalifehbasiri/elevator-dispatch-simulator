@@ -8,7 +8,6 @@
 class Elevator;
 class Passenger;
 class Floor;
-class IElevatorDispatchStrategy;
 
 class SimulationController : public QObject
 {
@@ -22,7 +21,6 @@ private:
     std::vector<Passenger*> passengers;
     std::vector<Floor*> floors;
 
-    IElevatorDispatchStrategy* dispatchStrategy;
     bool isRunning;
     QTimer* simulationTimer;
     int currentTime;

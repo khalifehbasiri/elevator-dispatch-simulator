@@ -38,6 +38,7 @@ private:
 
 public:
     explicit Elevator(int id, QObject* parent=nullptr);
+    ~Elevator() override;
 
     void requestMove(int targetFloor);
     void openDoor();

@@ -13,12 +13,17 @@ Elevator::Elevator(int id, QObject* parent)
       capacity(5),
       passengerCountInside(0),
       isOverloaded(false),
+      state(new IdleState()),
       hasActiveRequest(false),
       pickedUpPassenger(false),
       requestStartFloor(-1),
-      requestDestFloor(-1),
-      state(new IdleState())
+      requestDestFloor(-1)
 {
+}
+
+Elevator::~Elevator()
+{
+    delete state;
 }
 
 
