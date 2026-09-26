@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
         QMetaObject::invokeMethod(controller, "advanceSimulation", Qt::DirectConnection);
     auto* elevator = controller->getElevators().front();
     if (elevator->getCurrentFloor() != 3 || elevator->getPassengerCount() != 0) return 3;
+    if (!window.findChild<QPlainTextEdit*>("logOutput")->toPlainText().contains("Car 01 at F3")) return 11;
     QCoreApplication::processEvents();
     if (argc > 1 && !window.grab().save(argv[1])) return 4;
     for (int i = 0; i < 2; ++i)

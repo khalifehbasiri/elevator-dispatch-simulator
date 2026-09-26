@@ -16,6 +16,7 @@
 #include <QScrollArea>
 #include <QSpinBox>
 #include <QStyle>
+#include <QStringList>
 #include <QTextDocument>
 #include <QVBoxLayout>
 #include <algorithm>
@@ -53,7 +54,9 @@ void addField(QGridLayout* grid, int row, int column, const QString& title, QWid
 {
     auto* field = new QVBoxLayout;
     field->setSpacing(6);
-    field->addWidget(label(title, "fieldLabel"));
+    auto* fieldLabel = label(title, "fieldLabel");
+    fieldLabel->setBuddy(control);
+    field->addWidget(fieldLabel);
     field->addWidget(control);
     grid->addLayout(field, row, column);
 }
@@ -268,6 +271,10 @@ void MainWindow::applyConfiguration()
 
 void MainWindow::addPassengerScript()
 {
+    if (runState == RunState::Stopped) {
+        appendToLog("Apply setup before scheduling a new run.");
+        return;
+    }
     if (startFloorSpinBox->value() == destFloorSpinBox->value()) {
         appendToLog("Choose different pickup and destination floors.");
         return;
@@ -289,6 +296,10 @@ void MainWindow::addPassengerScript()
 
 void MainWindow::addSafetyEvent()
 {
+    if (runState == RunState::Stopped) {
+        appendToLog("Apply setup before scheduling a new run.");
+        return;
+    }
     const int nextTick = SimulationController::getInstance()->getCurrentTime() + 1;
     if (eventTimeSpinBox->value() < nextTick) {
         appendToLog("Choose a future second for the event.");
@@ -362,6 +373,12 @@ void MainWindow::onSimulationUpdated()
     scriptTimeSpinBox->setMinimum(std::min(now + 1, 3600));
     eventTimeSpinBox->setMinimum(std::min(now + 1, 3600));
     refreshFloorGrid();
+    QStringList positions;
+    const auto& elevators = controller->getElevators();
+    for (int index = 0; index < static_cast<int>(elevators.size()); ++index)
+        positions << QString("Car %1 at F%2").arg(index + 1, 2, 10, QLatin1Char('0'))
+                         .arg(elevators[index]->getCurrentFloor());
+    appendToLog(QString("t=%1: %2").arg(now).arg(positions.join(" | ")));
 }
 
 void MainWindow::refreshFloorGrid()
